@@ -79,3 +79,11 @@ cd ESP32_Beacon
 idf.py build && esptool.py --chip esp32 -p /dev/ttyUSB0 erase_flash && idf.py -p /dev/ttyUSB0 flash
 screen /dev/ttyUSB0 115200
 ``` 
+* Merge the binary files and flash it later
+```
+esptool.py --chip esp32 merge_bin -o esp32_beacon.bin 0x1000  build/bootloader/bootloader.bin           \
+                                                      0x8000  build/partition_table/partition-table.bin \
+                                                      0x10000 build/ESP32_Beacon.bin
+esptool.py --chip esp32 -p /dev/ttyUSB0 erase_flash
+esptool.py --chip esp32 -p /dev/ttyUSB0 write_flash   0x0 esp32_beacon.bin
+```
